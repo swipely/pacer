@@ -3,10 +3,10 @@ module LockJar
   # register all Jarfiles
   def self.register_bundled_jarfiles
     if defined? Bundler
-      Gem::Specification.
-        map { |s| File.join(s.full_gem_path, 'Jarfile') }.
-        select { |f| File.exists? f }.
-        each { |f| LockJar.register_jarfile f }
+      Gem::Specification.each do |spec|
+        jarfile = File.join(spec.full_gem_path, 'Jarfile')
+        LockJar.register_jarfile(jarfile, spec) if File.exist? jarfile
+      end
       true
     end
   end
